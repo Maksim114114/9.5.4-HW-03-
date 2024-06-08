@@ -1,0 +1,37 @@
+{% extends 'flatpages/default.html' %}
+{% block content %}
+
+<h1>Новость1(postsid.html)</h1>
+{% if postsid %}<!--если нет данных и таблицы то показывает <h2>Товаров нет!</h2>-->
+
+<hr>
+<table>
+	<tr>
+			<td>Название(title)</td>
+			<td>Описание(post_text)</td>
+			<td>время создания поста(time_in_post)</td>
+			<td>событие(event)</td>
+			<td>Категория</td>
+		</tr>
+		<tr>
+			<td>{{ postsid.title }}</td>
+			<td>{{ postsid.post_text }}</td>
+			<td>{{ postsid.time_in_post|date:'d m Y' }}</td>
+			<td>{{ postsid.event }}</td>
+			<td>{{ postsid.categories.all }}</td>
+<!--			<td>{{ postsid.categories.all}}</td>-->
+</table>
+
+{% else %}
+       <h2>новостей нет!</h2>
+   {% endif %}
+			</td>
+		</tr>
+</table>
+<a href="{% url 'post_edit' postsid.pk %}">Редактировать</a>
+<br>
+<a href="{% url 'post_delete' postsid.pk %}">удалить пост</a><br />
+<button><a href="{% url 'posts_detail1' %}">на главную страницу </a></button> <br />
+
+{% endblock content %}
+

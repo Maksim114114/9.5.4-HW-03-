@@ -1,0 +1,84 @@
+{% extends 'flatpages/default.html' %}
+<!--{% load custom_filters %}это фильтр с файла custom_filters.py  -->
+{% load custom_filters %}!
+{% block title %}
+новости!
+{% endblock title %}
+
+{% block content %}
+
+   <h1>Все Новости и посты(posts.html)</h1>
+    <h1>Список новостей ({{ news_count }})</h1>
+   <h3>{{ time_now|date:'M d Y' }}</h3>
+    <form action="" method="get">
+        {{ filterset.form.as_p }}
+       </form>
+   <hr>
+    {% if posts %}
+       <table>
+           <tr>
+               <td>Название(title)</td>
+               <td>Описание(post_text)</td>
+               <td>событие(event)</td>
+               <td>время создания поста(time_in_post)</td>
+               <td>категория</td>
+           </tr>{% for post in posts %}<tr>
+              <td align="left">{{ post.title|censor|preview }}</td>
+              <td><a href="{% url 'posts_detail' post.pk %}">{{ post.post_text }}</a></td>
+               <td>{{ post.event }}</td>
+               <td>{{ post.time_in_post|date:'d.m.Y H:i' }}</td>
+               <td>{% for category in post.categories.all %}
+                   <a href="{% url 'categories' category.id%}"> {{category }}</a>
+                   {% endfor %}
+                </td>
+		   </tr>
+		   {% endfor %}
+
+       </table>
+
+       {% if is_not_subscriber %}
+       <p class="text-center"><a href="{% url 'subscribe' category.id %}"style="background-color:green" class="btn btn-secondary btn-sm">подписаться1</a></p>
+       {% endif %}
+
+   {% else %}
+       <h2>новостей нет!</h2>
+
+   {% endif %}
+
+   {# Добавляем пагинацию на страницу #}
+
+   {# Информация о предыдущих страницах #}
+   {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+			</td>
+		</tr>
+</table>
+<br>
+<button><a href="{% url 'post_crete' %}">создать новый пост </a> </button><br />
+<br>
+<button><a href="{% url 'posts_search' %}">поиск поста </a> </button><br />
+<form action="{% url 'logout' %}" method="post">
+{%csrf_token %}
+<input type="submit" value="Выйти">
+
+{% endblock content %}
+
+
+

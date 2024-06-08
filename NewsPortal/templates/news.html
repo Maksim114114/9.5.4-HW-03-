@@ -1,0 +1,86 @@
+{% extends 'flatpages/default.html' %}
+<!--{% load custom_filters %}это фильтр с файла custom_filters.py  -->
+{% load custom_filters %}!
+{% block title %}
+новости!
+{% endblock title %}
+
+
+{% block content %}
+   <h1>Все Новости и посты</h1>
+<!-- Используем переданную из представления переменную time_now
+   и применяем к ней фильтр date. По назначению этот фильтр очень похож
+   на метод strftime у объекта datetime в Python — вывод времени
+   в указанном формате. -->
+    <h1>Список новостей ({{ news_count }})</h1>
+   <h3>{{ time_now|date:'M d Y' }}</h3>
+   <hr>
+    {% if posts %}<!--если нет данных и таблицы то показывает <h2>Товаров нет!</h2>-->
+       <table> <!-- Начинаем описывать таблицу -->
+           <tr> <!-- Добавляем строку -->
+               <td> <!-- Добавляем ячейку в строку -->
+                   Название(title)
+               </td>
+               <td> <!-- Добавляем ещё одну ячейку в строку и так далее -->
+                   Описание(post_text)
+               </td>
+               <td>
+                   Категория(event)
+               </td>
+               <td>
+                   время создания поста(time_in_post)
+               </td>
+           </tr> <!-- Не забываем закрыть HTML-тег строки -->
+           <!-- Для каждого товара будете генерироваться новая строчка,
+           т.е. новый HTML код, который указан в теле цикла.
+           При этом сам цикл работает точно так же, как и в Python.
+           product — переменная цикла, т.е. наш товар полученный из списка -->
+           {% for post in posts %}
+           <tr>
+               <!-- Не забываем, что переменные в шаблоне ничем не отличаются
+                от переменных в Python. Здесь также можно получать доступ к
+                полям объекта модели. Например, здесь мы выводим имя,
+                в следующем столбце описание, и т.д.  -->
+              <td align="left">{{ post.title|censor|preview }}</td>
+                <!-- Добавим специальный фильтр truncatechars,
+                чтобы ограничить количество символов до 15.
+                Все остальные символы превратятся в многоточие. -->
+<!--               <td>{{ post.post_text|truncatechars:100 }}</td>-->
+               <td><a href="{% url 'posts_detail' post.pk %}">{{ post.post_text }}</a></td>
+<!--               <td>{{ post.post_text }}</td>-->
+               <td>{{ post.event }}</td>
+               <td>{{ post.time_in_post|date:'d.m.Y H:i' }}</td>
+           </tr>
+           {% endfor %}
+
+       </table>
+   {% else %}
+       <h2>новостей нет!</h2>
+   {% endif %}
+{# Добавляем пагинацию на страницу #}
+
+   {# Информация о предыдущих страницах #}
+   {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+
+
+       {% endif %}
+   {% endif %}
+
+
+{% endblock content %}

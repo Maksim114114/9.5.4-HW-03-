@@ -1,0 +1,16 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+<!-- Название у нас будет Product -->
+{% block title %}
+Product
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
+{% block content %}
+
+<h1>{{ product }}</h1>
+<!-- <h1>{{ product }}</h1> источник взято от туда  с models.py   def __str__(self):-->
+<!--        return f'{self.name.title()}: {self.description[:20]}({self.price})' выводит на экран имя ,описания и цена  -->
+<!--<h1>{{ product.price }}</h1> выводит на экран только цену.-->
+{% endblock content %}

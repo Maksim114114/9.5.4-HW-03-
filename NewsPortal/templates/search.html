@@ -1,0 +1,28 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Search
+{% endblock title %}
+
+{% block content %}
+    <h2>Search in posts(поиск поста)</h2>
+    <h3>{{ time_in|date:'d m Y' }}</h3>
+    <form action="" method="get">
+         {{ filterset.form.as_p }}
+        <input type="submit" value="Найти"/>
+    </form>
+    {% for post in search %}
+     <div>
+     {{ post.author }}
+     {{ post.title }}
+
+
+
+<!--     {{ post.time_in_post|date:'d M Y' }}-->
+<!--     {{ post.content|truncatechars:25 }}-->
+<!--     {{ post.get_post_kind_display }}-->
+     </div>
+    {% endfor %}
+{{ post }}
+<button><a href="{% url 'posts_detail1' %}">назад </a></button> <br />
+{% endblock content %}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Уведомление</title>
+</head>
+<body>
+    <h2>Здравствуйте! Новые статьи за последнюю неделю(daily_post.html)(runapscheduler.py)</h2>
+    <ul>
+        {% for post in posts %}
+            <p><b>Заголовок:</b> {{ post.title }}</p>
+            <p><b>Краткое содержание:</b>{{ post.post_text|truncatechars:50 }}</p>
+            <h3><a href="{{ link }}{{ post.id }}">Читать в источнике</a></h3>
+            <hr>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
+
+
+
